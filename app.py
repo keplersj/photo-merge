@@ -21,7 +21,7 @@ for file_name in files:
     descs.append(description)
     st.write(description)
 
-if descs.count() > 0:
+if len(descs) > 0:
     description = ' '.join(descs)
     st.write(description)
     for image in pipe(description):
