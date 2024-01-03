@@ -7,9 +7,10 @@ model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-capt
 
 file_name = st.file_uploader("Upload image 1")
 
-image = Image.open(file_name)
+if file_name is not None:
+    image = Image.open(file_name)
 
-inputs = processor(image, return_tensors="pt")
+    inputs = processor(image, return_tensors="pt")
 
-out = model.generate(**inputs)
-st.write(processor.decode(out[0], skip_special_tokens=True))
+    out = model.generate(**inputs)
+    st.write(processor.decode(out[0], skip_special_tokens=True))
