@@ -14,7 +14,7 @@ with st.sidebar:
         "microsoft/git-base",
         "ydshieh/vit-gpt2-coco-en"
     ])
-    caption_max_tokens = st.number_input("Image Caption: Max Tokens")
+    caption_max_tokens = st.number_input("Image Caption: Max Tokens", value=20)
     st.divider()
     caption_concat_joiner = st.text_input("Caption Concatenation Joiner", value=" ")
     st.divider()
@@ -28,7 +28,7 @@ with st.sidebar:
     image_gen_width = st.number_input("Stable Diffusion: Width", value=512)
     image_gen_steps = st.slider("Stable Diffusion: Inference Steps", value=50)
     image_gen_guidance = st.slider("Stable Diffusion: Guidance Scale", value=7.5)
-    image_gen_number = st.number_input("Stable Diffusion: Images Generates", value=1)
+    image_gen_number = st.number_input("Stable Diffusion: Images Generated", value=1)
 
 for file_name in files:
     image = Image.open(file_name)
