@@ -12,17 +12,15 @@ descs = []
 
 for file_name in files:
     image = Image.open(file_name)
-    st.image(image)
 
     inputs = processor(image, return_tensors="pt")
 
     out = model.generate(**inputs)
     description = processor.decode(out[0], skip_special_tokens=True)
     descs.append(description)
-    st.write(description)
+    st.image(image, caption=description)
 
 if len(descs) > 0:
     description = ' '.join(descs)
-    st.write(description)
-    for image in pipe(description):
-        st.image(image)
+    for image in pipe(description).images:
+        st.image(image, caption=description)
