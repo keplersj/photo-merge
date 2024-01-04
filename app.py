@@ -10,14 +10,14 @@ pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4")
 captions = []
 
 with st.sidebar:
+    files = st.file_uploader("Upload images to blend", accept_multiple_files=True)
+    st.divider()
     image_gen_guidance = st.slider("Stable Diffusion: Guidance Scale", value=7.5)
     image_gen_steps = st.slider("stable Diffusion: Inference Steps", value=50)
 
 col1, col2 = st.columns(2)
 
 with col1:
-    files = st.file_uploader("Upload images to blend", accept_multiple_files=True)
-
     for file_name in files:
         image = Image.open(file_name)
 
@@ -33,7 +33,7 @@ with col2:
     if len(captions) > 0:
         description = ' '.join(captions)
 
-        with st.spinner('Generating Photo from Caption'):
+        with st.spinner(f'Generating Photo for {description}'):
             images = pipe(description, guidance_scale=image_gen_guidance, num_inference_steps=image_gen_steps).images
 
         for image in images:
