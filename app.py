@@ -20,25 +20,23 @@ with st.sidebar:
     image_gen_guidance = st.slider("Stable Diffusion: Guidance Scale", value=7.5)
     image_gen_steps = st.slider("stable Diffusion: Inference Steps", value=50)
 
-col1, col2 = st.columns(2)
+for file_name in files:
+    image = Image.open(file_name)
 
-with col1:
-    for file_name in files:
-        image = Image.open(file_name)
+    with st.spinner('Captioning Provided Image'):
+        captioner = transformer(model=caption_model)
+        caption = captioner(image)[0]['generated_text']
 
-        with st.spinner('Captioning Provided Image'):
-            captioner = transformer(model=caption_model)
-            caption = captioner(image)[0]
+    captions.append(caption)
+    st.image(image, caption=caption)
 
-        captions.append(caption)
-        st.image(image, caption=caption)
+st.divider()
 
-with col2:
-    if len(captions) > 0:
-        description = ' '.join(captions)
+if len(captions) > 0:
+    description = ' '.join(captions)
 
-        with st.spinner(f'Generating Photo for {description}'):
-            images = pipe(description, guidance_scale=image_gen_guidance, num_inference_steps=image_gen_steps).images
+    with st.spinner(f'Generating Photo for {description}'):
+        images = pipe(description, guidance_scale=image_gen_guidance, num_inference_steps=image_gen_steps).images
 
-        for image in images:
-            st.image(image, caption=description)
+    for image in images:
+        st.image(image, caption=description)
