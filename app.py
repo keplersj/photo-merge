@@ -27,7 +27,6 @@ with col1:
             description = processor.decode(out[0], skip_special_tokens=True)
             captions.append(description)
 
-        st.success("Image Captioned")
         st.image(image, caption=description)
 
 with col2:
@@ -37,6 +36,5 @@ with col2:
         with st.spinner('Generating Photo from Caption'):
             images = pipe(description, guidance_scale=image_gen_guidance, num_inference_steps=image_gen_steps).images
 
-        st.success("Image Generated")
         for image in images:
             st.image(image, caption=description)
