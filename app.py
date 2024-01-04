@@ -7,26 +7,36 @@ processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-larg
 model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large")
 pipe = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4")
 
-descs = []
+captions = []
 
 with st.sidebar:
     image_gen_guidance = st.slider("Stable Diffusion: Guidance Scale", value=7.5)
     image_gen_steps = st.slider("stable Diffusion: Inference Steps", value=50)
 
-files = st.file_uploader("Upload images to blend", accept_multiple_files=True)
+col1, col2 = st.columns(2)
 
-for file_name in files:
-    image = Image.open(file_name)
+with col1:
+    files = st.file_uploader("Upload images to blend", accept_multiple_files=True)
 
-    inputs = processor(image, return_tensors="pt")
+    for file_name in files:
+        image = Image.open(file_name)
 
-    out = model.generate(**inputs)
-    description = processor.decode(out[0], skip_special_tokens=True)
-    descs.append(description)
-    st.image(image, caption=description)
+        with st.spinner('Captioning Provided Image'):
+            inputs = processor(image, return_tensors="pt")
+            out = model.generate(**inputs)
+            description = processor.decode(out[0], skip_special_tokens=True)
+            captions.append(description)
 
-if len(descs) > 0:
-    description = ' '.join(descs)
-    images = pipe(description, guidance_scale=image_gen_guidance, num_inference_steps=image_gen_steps).images
-    for image in images:
+        st.success("Image Captioned")
         st.image(image, caption=description)
+
+with col2:
+    if len(captions) > 0:
+        description = ' '.join(captions)
+
+        with st.spinner('Generating Photo from Caption'):
+            images = pipe(description, guidance_scale=image_gen_guidance, num_inference_steps=image_gen_steps).images
+
+        st.success("Image Generated")
+        for image in images:
+            st.image(image, caption=description)
