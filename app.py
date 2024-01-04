@@ -28,7 +28,7 @@ with col1:
 
         with st.spinner('Captioning Provided Image'):
             captioner = transformer(model=caption_model)
-            caption = captioner(image)[0].generated_text
+            caption = captioner(image)[0]
 
         captions.append(caption)
         st.image(image, caption=caption)
