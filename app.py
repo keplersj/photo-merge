@@ -30,12 +30,12 @@ for file_name in files:
     captions.append(caption)
     st.image(image, caption=caption)
 
-st.divider()
-
 if len(captions) > 0:
+    st.divider()
+
     description = ' '.join(captions)
 
-    with st.spinner(f'Generating Photo for {description}'):
+    with st.spinner(f'Generating Photo for "{description}"'):
         images = pipe(description, guidance_scale=image_gen_guidance, num_inference_steps=image_gen_steps).images
 
     for image in images:
